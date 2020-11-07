@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "165039395425",
+    "firebase_url": "https://smartshopping-27f7e.firebaseio.com",
+    "project_id": "smartshopping-27f7e",
+    "storage_bucket": "smartshopping-27f7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165039395425:android:343a9c05b7645f4c545020",
+        "android_client_info": {
+          "package_name": "com.example.smartshopping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165039395425-v3b76emhep6be1p7e96rldd6lm7hc2n7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smartshopping",
+            "certificate_hash": "28318e3db90a2feca9b78f55d1c4c04dda5c245d"
+          }
+        },
+        {
+          "client_id": "165039395425-4mrd1afor2equo677fl70t4bi35vr5ui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChz2R_4Qyb7XdbZs5KmonA-FQu-oEiBY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165039395425-4mrd1afor2equo677fl70t4bi35vr5ui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

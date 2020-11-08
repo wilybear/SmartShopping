@@ -1,16 +1,20 @@
 package com.example.smartshopping.views;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -51,6 +55,12 @@ public class SignInFragment extends Fragment {
         pwdEditText = view.findViewById(R.id.pwdInput);
         signInText = view.findViewById(R.id.signInBtt);
         signUpText = view.findViewById(R.id.signUpBtt);
+        RelativeLayout signInRootLayout = view.findViewById(R.id.signInRootLayout);
+        signInRootLayout.setBackgroundResource(R.drawable.gradient_animation);
+        AnimationDrawable animationDrawable = (AnimationDrawable) signInRootLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(10);
+        animationDrawable.setExitFadeDuration(5000);
+        animationDrawable.start();
 
         signInText.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.P)

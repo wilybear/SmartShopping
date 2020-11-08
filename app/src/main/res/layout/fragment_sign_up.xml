@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/signUpRootLayout"
     android:background="@drawable/login_background"
     >
     <Button
@@ -29,6 +30,9 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:padding="15dp"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:nextFocusDown="@id/signUpPwdInput"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:backgroundTint="@android:color/white"
@@ -39,6 +43,10 @@
             android:id="@+id/signUpPwdInput"
             android:layout_height="wrap_content"
             android:hint="Password"
+
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:nextFocusDown="@id/signUpPwdInput2"
             android:padding="15dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
@@ -50,6 +58,10 @@
             android:id="@+id/signUpPwdInput2"
             android:layout_height="wrap_content"
             android:hint="Re-enter password"
+
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:nextFocusDown="@id/signUpBirthdayInput"
             android:padding="15dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
@@ -63,6 +75,8 @@
             android:hint="Birthday"
             android:clickable="true"
             android:inputType="date"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:padding="15dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"

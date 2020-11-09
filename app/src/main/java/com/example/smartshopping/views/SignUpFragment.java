@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ public class SignUpFragment extends Fragment {
     private EditText birthdayText;
     private Button backBtt;
     private SignUpViewModel signUpViewModel;
+    private RadioGroup radioGenderGroup;
 
 
     @Override
@@ -71,6 +74,7 @@ public class SignUpFragment extends Fragment {
         signUpText = view.findViewById(R.id.signUpBtt);
         birthdayText = view.findViewById(R.id.signUpBirthdayInput);
         backBtt = view.findViewById(R.id.backBtt);
+        radioGenderGroup = view.findViewById(R.id.radioGender);
 
         RelativeLayout signUpRootLayout = view.findViewById(R.id.signUpRootLayout);
         signUpRootLayout.setBackgroundResource(R.drawable.gradient_animation);
@@ -113,6 +117,10 @@ public class SignUpFragment extends Fragment {
                 String email = emailEditText.getText().toString();
                 String password = pwdEditText.getText().toString();
                 String password2 = pwdEditText2.getText().toString();
+                String birthday = birthdayText.getText().toString();
+                int selectedId = radioGenderGroup.getCheckedRadioButtonId();
+                int lastChildId = radioGenderGroup.getChildCount()-1;
+
                 if (!signUpViewModel.isEmail(emailEditText)) {
                     emailEditText.setError("Enter valid Email");
                 }
@@ -122,9 +130,16 @@ public class SignUpFragment extends Fragment {
                 if (!password.equals(password2)) {
                     pwdEditText2.setError("Check password");
                 }
+                if (birthday.length() == 0){
+                    birthdayText.setError("Enter birthday");
+                }
+                if(selectedId <= 0){
+                    ((RadioButton)radioGenderGroup.getChildAt(lastChildId)).setError("Select gender");
+                }
                 if (signUpViewModel.isEmail(emailEditText) && password.length() > 0
-                        && password.equals(password2)) {
+                        && password.equals(password2) && birthday.length()!= 0 && selectedId >0) {
                     signUpViewModel.signUp(email, password);
+                    Toast.makeText(getContext(),selectedId +"",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -139,6 +154,8 @@ public class SignUpFragment extends Fragment {
     }
 
     private void updateLabel(Date d) {
-        birthdayText.setText(d.toString());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        birthdayText.setText(format.format(d));
     }
 }

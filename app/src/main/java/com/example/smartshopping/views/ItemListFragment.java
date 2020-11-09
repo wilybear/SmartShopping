@@ -31,10 +31,11 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     private List<ItemModel> itemModelList;
     private ItemListAdapter itemListAdapter;
     private ItemListViewModel itemListViewModel;
-
+    private RecyclerView recyclerView;
     private Button logoutBtt;
     private TextView loggedUserTextView;
     private TextView tvNoResult;
+    private Button changer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,8 +80,8 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         recyclerView.setLayoutManager(layoutManager);
         itemListAdapter = new ItemListAdapter(getContext(), itemModelList, this);
         recyclerView.setAdapter(itemListAdapter);
@@ -88,11 +89,25 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         logoutBtt = view.findViewById(R.id.logoutBtt);
         loggedUserTextView = view.findViewById(R.id.userIdView);
         tvNoResult = view.findViewById(R.id.noResultView);
-
+        changer = view.findViewById(R.id.layoutChanger);
         logoutBtt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 itemListViewModel.logOut();
+            }
+        });
+
+        changer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(itemListAdapter.isGridOption()){
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    itemListAdapter.setGridOption(false);
+                }else{
+                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+                    itemListAdapter.setGridOption(true);
+                }
+                recyclerView.setAdapter(itemListAdapter);
             }
         });
         return view;

@@ -22,11 +22,13 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     private Context context;
     private List<ItemModel> itemList;
     private ItemClickListener itemClickListener;
+    private boolean gridOption;
 
     public ItemListAdapter(Context context, List<ItemModel> itemList,ItemClickListener itemClickListener) {
         this.context = context;
         this.itemList = itemList;
         this.itemClickListener = itemClickListener;
+        gridOption = true;
     }
     public void setItemList(List<ItemModel> itemList){
         this.itemList = itemList;
@@ -36,7 +38,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     @NonNull
     @Override
     public ItemListAdapter.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_view_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(gridOption ? R.layout.item_grid_layout : R.layout.item_lineary_view,parent,false);
 
         return new ItemViewHolder(view);
     }
@@ -78,5 +80,13 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
     public interface ItemClickListener{
         public void onItemClick(ItemModel model);
+    }
+
+    public void setGridOption(boolean gridOption) {
+        this.gridOption = gridOption;
+    }
+
+    public boolean isGridOption() {
+        return gridOption;
     }
 }

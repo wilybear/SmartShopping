@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.smartshopping.model.AppRepository;
+import com.example.smartshopping.model.AreaModel;
 import com.example.smartshopping.model.ItemModel;
 import com.example.smartshopping.model.UserModel;
 import com.example.smartshopping.network.APIService;
@@ -56,4 +57,5 @@ public class ItemViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> getLoggedOutMutableLiveData() {
         return loggedOutMutableLiveData;
     }
+
 }

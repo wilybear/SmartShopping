@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.smartshopping.model.AppRepository;
+import com.example.smartshopping.model.AreaModel;
 import com.example.smartshopping.model.ItemModel;
 import com.example.smartshopping.model.UserModel;
 import com.example.smartshopping.network.APIService;
@@ -30,11 +31,13 @@ public class ItemListViewModel extends AndroidViewModel {
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private MutableLiveData<Boolean> loggedOutMutableLiveData;
     private MutableLiveData<UserModel> userModelMutableLiveData;
+    private MutableLiveData<AreaModel> areaModelMutableLiveData;
 
     public ItemListViewModel(@NonNull Application application){
         super(application);
         itemsList = new MutableLiveData<>();
         this.appRepository = new AppRepository(application);
+        areaModelMutableLiveData = new MutableLiveData<>();
         userMutableLiveData = appRepository.getUserMutableLiveData();
         loggedOutMutableLiveData = appRepository.getLoggedOutMutableLiveData();
     }
@@ -58,6 +61,11 @@ public class ItemListViewModel extends AndroidViewModel {
         return userModelMutableLiveData;
     }
 
+
+    public MutableLiveData<AreaModel> getAreaModelMutableLiveData(){
+        return areaModelMutableLiveData;
+    }
+
     public void makeApiCall(){
         APIService apiService = RetroInstance.getRetroClient().create(APIService.class);
         Call<List<ItemModel>> call = apiService.getItemList();
@@ -72,5 +80,9 @@ public class ItemListViewModel extends AndroidViewModel {
                 itemsList.postValue(null);
             }
         });
+    }
+
+    public void changeArea(AreaModel areaModel){
+        areaModelMutableLiveData.postValue(areaModel);
     }
 }

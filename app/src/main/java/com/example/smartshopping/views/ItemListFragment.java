@@ -20,9 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshopping.R;
 import com.example.smartshopping.adapter.ItemListAdapter;
+import com.example.smartshopping.model.AreaModel;
 import com.example.smartshopping.model.ItemModel;
 import com.example.smartshopping.viewmodel.ItemListViewModel;
 import com.google.firebase.auth.FirebaseUser;
+import com.pedro.library.AutoPermissions;
 
 import java.util.List;
 
@@ -42,6 +44,9 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         super.onCreate(savedInstanceState);
 
         itemListViewModel = ViewModelProviders.of(this).get(ItemListViewModel.class);
+
+        AutoPermissions.Companion.loadAllPermissions(getActivity(),101); // AutoPermissions
+
         itemListViewModel.getItemsListObserver().observe(this, new Observer<List<ItemModel>>() {
             @Override
             public void onChanged(List<ItemModel> itemModels) {
@@ -68,6 +73,16 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             public void onChanged(Boolean loggedOut) {
                 if(loggedOut){
                     Navigation.findNavController(getView()).navigate(R.id.action_itemListFragment_to_signInFragment);
+                }
+            }
+        });
+
+        itemListViewModel.getAreaModelMutableLiveData().observe(this, new Observer<AreaModel>() {
+            @Override
+            public void onChanged(AreaModel areaModel) {
+                if(areaModel != null){
+                    //itemListViewModel.makeApiCall
+                    //TODO: 구역 및 유저 정보 보내고 RecyclerView에 데이터 뿌리기
                 }
             }
         });
@@ -112,6 +127,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         });
         return view;
     }
+
 
     @Override
     public void onItemClick(ItemModel model) {

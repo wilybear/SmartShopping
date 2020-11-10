@@ -12,11 +12,13 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.smartshopping.model.AppRepository;
+import com.example.smartshopping.model.UserModel;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpViewModel extends AndroidViewModel {
     private AppRepository appRepository;
     private MutableLiveData<FirebaseUser> userMutableLiveData;
+    private MutableLiveData<UserModel> userModelMutableLiveData;
 
 
     public SignUpViewModel(@NonNull Application application) {
@@ -25,8 +27,8 @@ public class SignUpViewModel extends AndroidViewModel {
         userMutableLiveData = appRepository.getUserMutableLiveData();
     }
 
-    public void signUp(String email, String password){
-        appRepository.signUp(email,password);
+    public void signUp(String email, String password,String birthday, String gender){
+        appRepository.signUp(email,password,birthday,gender);
     }
 
 //    public void signIn(String email, String password){
@@ -35,6 +37,10 @@ public class SignUpViewModel extends AndroidViewModel {
 
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {
         return userMutableLiveData;
+    }
+
+    public MutableLiveData<UserModel> getUserModelMutableLiveData() {
+        return userModelMutableLiveData;
     }
 
     public boolean isEmail(EditText text) {

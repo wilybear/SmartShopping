@@ -10,9 +10,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.smartshopping.model.AppRepository;
 import com.example.smartshopping.model.ItemModel;
+import com.example.smartshopping.model.UserModel;
 import com.example.smartshopping.network.APIService;
 import com.example.smartshopping.network.RetroInstance;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class ItemListViewModel extends AndroidViewModel {
     private AppRepository appRepository;
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private MutableLiveData<Boolean> loggedOutMutableLiveData;
-
+    private MutableLiveData<UserModel> userModelMutableLiveData;
 
     public ItemListViewModel(@NonNull Application application){
         super(application);
@@ -35,7 +37,6 @@ public class ItemListViewModel extends AndroidViewModel {
         this.appRepository = new AppRepository(application);
         userMutableLiveData = appRepository.getUserMutableLiveData();
         loggedOutMutableLiveData = appRepository.getLoggedOutMutableLiveData();
-
     }
 
     public MutableLiveData<List<ItemModel>> getItemsListObserver(){
@@ -51,6 +52,10 @@ public class ItemListViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> getLoggedOutMutableLiveData() {
         return loggedOutMutableLiveData;
+    }
+
+    public MutableLiveData<UserModel> getUserModelMutableLiveData() {
+        return userModelMutableLiveData;
     }
 
     public void makeApiCall(){

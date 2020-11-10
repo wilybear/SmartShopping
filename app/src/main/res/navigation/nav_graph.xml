@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/signInFragment">
     <fragment
         android:id="@+id/signInFragment"
@@ -17,6 +19,7 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/signInFragment"
             app:popUpToInclusive="true" />
+
     </fragment>
     <fragment
         android:id="@+id/itemListFragment"
@@ -28,6 +31,9 @@
             app:enterAnim="@android:anim/slide_in_left"
             app:popUpTo="@id/itemListFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_itemListFragment_to_itemFragement"
+            app:destination="@id/itemFragement" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -39,5 +45,19 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:popUpTo="@id/signInFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemFragement"
+        android:name="com.example.smartshopping.views.ItemFragment"
+        android:label="fragment_item_fragement"
+        tools:layout="@layout/fragment_item_fragement">
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="title"/>
+        <argument
+            android:name="url"
+            app:argType="string"
+            android:defaultValue="url"/>
     </fragment>
 </navigation>

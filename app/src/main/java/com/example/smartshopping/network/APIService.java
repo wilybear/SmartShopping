@@ -11,5 +11,5 @@ public interface APIService {
     //@GET("photos")
     @GET("volley_array.json")
     Call<List<ItemModel>> getItemList();
-
+    Call<ItemModel> getItem();
 }

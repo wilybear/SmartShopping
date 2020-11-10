@@ -116,5 +116,9 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     @Override
     public void onItemClick(ItemModel model) {
         Toast.makeText(getContext(), "Clicked Title :" + model.getImageUrl(), Toast.LENGTH_LONG).show();
+        Bundle args = new Bundle();
+        args.putString("title", model.getTitle());
+        args.putString("url", model.getImageUrl());
+        Navigation.findNavController(getView()).navigate(R.id.action_itemListFragment_to_itemFragement,args);
     }
 }

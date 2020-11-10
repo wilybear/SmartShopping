@@ -46,6 +46,7 @@ public class SignUpFragment extends Fragment {
     private Button backBtt;
     private SignUpViewModel signUpViewModel;
     private RadioGroup radioGenderGroup;
+    private RadioButton radioButton;
 
 
     @Override
@@ -118,6 +119,7 @@ public class SignUpFragment extends Fragment {
                 String password = pwdEditText.getText().toString();
                 String password2 = pwdEditText2.getText().toString();
                 String birthday = birthdayText.getText().toString();
+                String gender = "";
                 int selectedId = radioGenderGroup.getCheckedRadioButtonId();
                 int lastChildId = radioGenderGroup.getChildCount()-1;
 
@@ -135,10 +137,16 @@ public class SignUpFragment extends Fragment {
                 }
                 if(selectedId <= 0){
                     ((RadioButton)radioGenderGroup.getChildAt(lastChildId)).setError("Select gender");
+                }else{
+                    if(selectedId == R.id.radioMale){
+                        gender = "male";
+                    }else{
+                        gender = "female";
+                    }
                 }
                 if (signUpViewModel.isEmail(emailEditText) && password.length() > 0
                         && password.equals(password2) && birthday.length()!= 0 && selectedId >0) {
-                    signUpViewModel.signUp(email, password);
+                    signUpViewModel.signUp(email, password,birthday,gender);
                     Toast.makeText(getContext(),selectedId +"",Toast.LENGTH_LONG).show();
                 }
             }

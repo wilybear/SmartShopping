@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
 
@@ -34,6 +35,7 @@ public class AppRepository {
     private Application application;
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private MutableLiveData<Boolean> loggedOutMutableLiveData;
+    private MutableLiveData<UserModel> userModelMutableLiveData;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
 
@@ -42,9 +44,11 @@ public class AppRepository {
         firebaseAuth = FirebaseAuth.getInstance();
         userMutableLiveData = new MutableLiveData<>();
         loggedOutMutableLiveData = new MutableLiveData<>();
+        userModelMutableLiveData = new MutableLiveData<>();
         db = FirebaseFirestore.getInstance();
         if(firebaseAuth.getCurrentUser()!=null){
             userMutableLiveData.postValue(firebaseAuth.getCurrentUser());
+            getUserInfo();
             loggedOutMutableLiveData.postValue(false);
         }
     }
@@ -57,9 +61,7 @@ public class AppRepository {
                         if (task.isSuccessful()) {
                             userMutableLiveData.postValue(firebaseAuth.getCurrentUser());
                             if(firebaseAuth.getCurrentUser().getEmail() != null) {
-                                Map<String, Object> user = new HashMap<>();
-                                user.put("birthday", birthday);
-                                user.put("gender",gender );
+                                UserModel user = new UserModel(birthday,gender);
                                db.collection("User").document(firebaseAuth.getCurrentUser().getEmail()).set(user)
                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                                            @Override
@@ -85,12 +87,32 @@ public class AppRepository {
 
     }
 
+    public void getUserInfo(){
+        db.collection("User").document(firebaseAuth.getCurrentUser().getEmail()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if(documentSnapshot != null){
+                            UserModel userModel = documentSnapshot.toObject(UserModel.class);
+                            userModelMutableLiveData.postValue(userModel);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application,"ERROR:" + e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
     public void signIn(String email, String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getExecutor(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            getUserInfo();
                             userMutableLiveData.postValue(firebaseAuth.getCurrentUser());
                         } else {
                             Toast.makeText(application, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -110,6 +132,10 @@ public class AppRepository {
 
     public MutableLiveData<Boolean> getLoggedOutMutableLiveData() {
         return loggedOutMutableLiveData;
+    }
+
+    public MutableLiveData<UserModel> getUserModelMutableLiveData() {
+        return userModelMutableLiveData;
     }
 
     private Executor getExecutor(){

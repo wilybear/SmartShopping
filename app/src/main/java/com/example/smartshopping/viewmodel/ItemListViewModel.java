@@ -1,12 +1,10 @@
 package com.example.smartshopping.viewmodel;
 
 import android.app.Application;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.smartshopping.model.AppRepository;
 import com.example.smartshopping.model.AreaModel;
@@ -15,8 +13,6 @@ import com.example.smartshopping.model.UserModel;
 import com.example.smartshopping.network.APIService;
 import com.example.smartshopping.network.RetroInstance;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.List;
 

@@ -8,6 +8,8 @@ public class Beacon {
     private int major;
     private int minor;
     private String name;
+    private int max_rssi;
+    private int min_rssi;
 
     public Beacon(UUID uuid, int rssi, int major, int minor, String name) {
         this.uuid = uuid;
@@ -15,6 +17,8 @@ public class Beacon {
         this.major = major;
         this.minor = minor;
         this.name = name;
+        max_rssi = rssi;
+        min_rssi = rssi;
     }
 
     public UUID getUuid() {
@@ -32,7 +36,15 @@ public class Beacon {
     }
 
     public void setRssi(int rssi) {
+        if(min_rssi > rssi){
+            //새로운 값이 더 작으면
+            min_rssi = rssi;
+        }
+        if(max_rssi < rssi){
+            max_rssi = rssi;
+        }
         this.rssi = rssi;
+
     }
 
     public int getMajor() {

@@ -2,9 +2,9 @@ package com.example.smartshopping.model;
 
 public class AreaModel {
     private int id;
-    private String area;
+    private char area;
 
-    public AreaModel(int id, String area) {
+    public AreaModel(int id, char area) {
         this.id = id;
         this.area = area;
     }
@@ -17,11 +17,11 @@ public class AreaModel {
         this.id = id;
     }
 
-    public String getArea() {
+    public char getArea() {
         return area;
     }
 
-    public void setArea(String area) {
+    public void setArea(char area) {
         this.area = area;
     }
 }

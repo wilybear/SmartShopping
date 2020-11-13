@@ -11,7 +11,7 @@ import retrofit2.http.Query;
 public interface APIService {
     //@GET("photos")
     @GET("/lists")
-    Call<List<ItemModel>> getItemList(@Query("gender")String gender, @Query("birthday")String birthday,@Query("area")String area);
+    Call<List<ItemModel>> getItemList(@Query("gender")String gender, @Query("birthday")String birthday,@Query("area") char area);
 
     @GET("volley_array.json")
     Call<List<ItemModel>> getItemList();

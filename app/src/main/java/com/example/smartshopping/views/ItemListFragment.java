@@ -7,14 +7,18 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +32,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartshopping.AreaPrediction;
 import com.example.smartshopping.R;
 import com.example.smartshopping.adapter.ItemListAdapter;
 import com.example.smartshopping.model.AreaModel;
@@ -54,9 +59,9 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     private Button logoutBtt;
     private TextView loggedUserTextView;
     private TextView tvNoResult;
-    private Button changer;
+    private ImageButton changer;
     private TextView tvArea;
-
+    private ImageButton refreshBtt;
     //bluetooth
     BluetoothManager btManager;
     BluetoothAdapter btAdapter;
@@ -65,11 +70,11 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     Boolean btScanning = false;
     public Map<String, String> uuids = new HashMap<String, String>();
     private Handler mHandler = new Handler();
-    ;
     private static final long SCAN_PERIOD = 5000;
+    private static final long LIMIT_RSSI = -70;
     private final static int REQUEST_ENABLE_BT = 1;
-    private ArrayList<Beacon> beacons = new ArrayList<>();
-    private boolean running;
+    private Map<Pair<Integer,Integer>, Beacon> beacons = new HashMap<>();
+    BleThread bleThread;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,6 +132,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         btManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
         btAdapter = btManager.getAdapter();
         btScanner = btAdapter.getBluetoothLeScanner();
+        bleThread = new BleThread();
 
     }
 
@@ -140,27 +146,30 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         btManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
         btAdapter = btManager.getAdapter();
         btScanner = btAdapter.getBluetoothLeScanner();
+        bleThread.running = true;
+        bleThread.start();
 
-        running = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (running) {
-                    startScanning();
-                    try {
-                        Thread.sleep(1000 * 60);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+    }
+    class BleThread extends Thread {
+        boolean running = true;
+
+        @Override
+        public void run() {
+            while (running && !isInterrupted()) {
+                startScanning();
+                try {
+                    Thread.sleep(1000 * 60);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        }).start();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        running = false; //쓰레드 종료
+        bleThread.running =false;
     }
 
     @Nullable
@@ -172,6 +181,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         recyclerView.setLayoutManager(layoutManager);
         itemListAdapter = new ItemListAdapter(getContext(), itemModelList, this);
         recyclerView.setAdapter(itemListAdapter);
+        refreshBtt = view.findViewById(R.id.refreshBtt);
 
         logoutBtt = view.findViewById(R.id.logoutBtt);
         loggedUserTextView = view.findViewById(R.id.userIdView);
@@ -199,6 +209,24 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             }
         });
 
+        refreshBtt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(btScanning){
+                    Toast.makeText(getContext(),"Scanning...",Toast.LENGTH_SHORT).show();
+                }else{
+                    if(bleThread.isAlive()) {
+                        bleThread.running = false;
+                        bleThread.interrupt();
+                    }
+                    bleThread = new BleThread();
+                    bleThread.running =true;
+                    bleThread.start();
+
+                }
+            }
+        });
+
 
         return view;
     }
@@ -221,9 +249,19 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             for (ADStructure structure : structures) {
                 if (structure instanceof IBeacon) {
                     IBeacon iBeacon = (IBeacon) structure;
+                    if(result.getRssi() < LIMIT_RSSI){
+                        continue;
+                    }
                     Beacon beacon = new Beacon(iBeacon.getUUID(), result.getRssi(), iBeacon.getMajor(), iBeacon.getMinor(),
                             result.getDevice().getName());
-                    beacons.add(beacon);
+                    Pair<Integer,Integer> key = Pair.create(iBeacon.getMajor(),iBeacon.getMinor());
+                    if(beacons.containsKey(key)){
+                        Beacon prevBeacon = beacons.get(key);
+                        prevBeacon.setRssi((prevBeacon.getRssi()+beacon.getRssi())/2);
+                        beacons.put(key,prevBeacon);
+                    }else {
+                        beacons.put(key, beacon);
+                    }
                     //getScanRecord.getServiceUUids()
                 }
             }
@@ -256,14 +294,11 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                 btScanner.stopScan(leScanCallback);
                 //beacons;
                 //TODO:AREA 계산하는 함수
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        for (Beacon beacon : beacons) {
-                            Toast.makeText(getContext(), beacon.getName(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                itemListViewModel.changeArea(new AreaModel(1,"A"));
+                AreaPrediction areaPrediction = new AreaPrediction(beacons);
+                char result = areaPrediction.predictArea();
+                if(result != ' '){
+                    itemListViewModel.changeArea(new AreaModel(1,result));
+                }
 
             }
         });

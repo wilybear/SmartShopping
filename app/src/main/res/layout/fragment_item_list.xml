@@ -8,13 +8,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listHeader">
-        <Button
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="정렬 변경"
-            android:id="@+id/layoutChanger"/>
+            android:layout_marginTop="10dp"
+            >
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:background="@color/colorTransparent"
+                android:src="@drawable/menu"
+                android:id="@+id/layoutChanger"/>
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/refreshBtt"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"
+                android:layout_marginRight="20dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:background="@color/colorTransparent"
+                android:src="@drawable/refresh"
+                />
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

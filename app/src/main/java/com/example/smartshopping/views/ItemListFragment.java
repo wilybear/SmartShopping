@@ -100,7 +100,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if (firebaseUser != null) {
-                    loggedUserTextView.setText("Logged In User: " + firebaseUser.getEmail());
+//                    loggedUserTextView.setText("Logged In User: " + firebaseUser.getEmail());
                 }
             }
         });
@@ -184,8 +184,8 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         refreshBtt = view.findViewById(R.id.refreshBtt);
 
         logoutBtt = view.findViewById(R.id.logoutBtt);
-        loggedUserTextView = view.findViewById(R.id.userIdView);
-        tvNoResult = view.findViewById(R.id.noResultView);
+//        loggedUserTextView = view.findViewById(R.id.userIdView);
+         tvNoResult = view.findViewById(R.id.noResultView);
         tvArea = view.findViewById(R.id.areaTextView);
         changer = view.findViewById(R.id.layoutChanger);
         logoutBtt.setOnClickListener(new View.OnClickListener() {

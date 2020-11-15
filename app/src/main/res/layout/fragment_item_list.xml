@@ -59,13 +59,27 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true" />
     </RelativeLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/userIdView"
-        android:textColor="@android:color/black"
-        android:layout_above="@id/recyclerView"/>
 
+    <com.skyfishjy.library.RippleBackground
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/content"
+        app:rb_color="#0099CC"
+        app:rb_radius="32dp"
+        app:rb_rippleAmount="4"
+        app:rb_duration="3000"
+        app:rb_scale="6">
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/centerImage"
+            android:visibility="visible"
+            android:src="@drawable/phone1"/>
+    </com.skyfishjy.library.RippleBackground>
+    
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

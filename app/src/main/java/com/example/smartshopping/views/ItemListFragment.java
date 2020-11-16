@@ -44,6 +44,7 @@ import com.neovisionaries.bluetooth.ble.advertising.ADPayloadParser;
 import com.neovisionaries.bluetooth.ble.advertising.ADStructure;
 import com.neovisionaries.bluetooth.ble.advertising.IBeacon;
 import com.pedro.library.AutoPermissions;
+import com.skyfishjy.library.RippleBackground;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +63,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     private ImageButton changer;
     private TextView tvArea;
     private ImageButton refreshBtt;
+    private RippleBackground rippleBackground;
     //bluetooth
     BluetoothManager btManager;
     BluetoothAdapter btAdapter;
@@ -118,16 +120,29 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             @Override
             public void onChanged(AreaModel areaModel) {
                 if (areaModel != null) {
-                    //itemListViewModel.makeApiCall
+                    itemListViewModel.makeApiCall();
                     //TODO: 구역 및 유저 정보 보내고 RecyclerView에 데이터 뿌리기
                     tvArea.setText(areaModel.getArea() + " Area");
+                    itemListViewModel.getAutoThread().postValue(true);
                 } else {
                     tvArea.setText("Searching...");
                 }
             }
         });
 
-        itemListViewModel.makeApiCall();
+        itemListViewModel.getAutoThread().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    rippleBackground.stopRippleAnimation();
+                    rippleBackground.setVisibility(View.GONE);
+                }else{
+                    rippleBackground.setVisibility(View.VISIBLE);
+                    rippleBackground.startRippleAnimation();
+                }
+            }
+        });
+
 
         btManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
         btAdapter = btManager.getAdapter();
@@ -139,6 +154,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     @Override
     public void onResume() {
         super.onResume();
+        //check if bluetooth is available
         if (btAdapter != null && !btAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -147,10 +163,16 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         btAdapter = btManager.getAdapter();
         btScanner = btAdapter.getBluetoothLeScanner();
         bleThread.running = true;
+
+        //if thread is alive, start() may throw threadStateException
         if(!bleThread.isAlive()) {
             bleThread = new BleThread();
             bleThread.running =true;
             bleThread.start();
+        }
+
+        if(itemListAdapter.getItemCount()==0){
+            itemListViewModel.getAutoThread().postValue(false);
         }
 
     }
@@ -193,6 +215,10 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
          tvNoResult = view.findViewById(R.id.noResultView);
         tvArea = view.findViewById(R.id.areaTextView);
         changer = view.findViewById(R.id.layoutChanger);
+        rippleBackground=(RippleBackground)view.findViewById(R.id.content);
+        if(itemListViewModel.getAreaModelMutableLiveData().getValue() != null) {
+            tvArea.setText(itemListViewModel.getAreaModelMutableLiveData().getValue().getArea() + " Area");
+        }
         logoutBtt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,6 +246,8 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                 if(btScanning){
                     Toast.makeText(getContext(),"Scanning...",Toast.LENGTH_SHORT).show();
                 }else{
+                    itemListAdapter.clearData();
+                    itemListViewModel.getAutoThread().postValue(false);
                     if(bleThread.isAlive()) {
                         bleThread.running = false;
                         bleThread.interrupt();
@@ -300,12 +328,14 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             @Override
             public void run() {
                 btScanner.stopScan(leScanCallback);
-                //beacons;
                 //TODO:AREA 계산하는 함수
                 AreaPrediction areaPrediction = new AreaPrediction(beacons);
-                char result = areaPrediction.predictArea();
+                //for debug
+                //char result = areaPrediction.predictArea();
+
+                char result = 'A';
                 if(result != ' '){
-                    itemListViewModel.changeArea(new AreaModel(1,result));
+                    itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(1,result));
                 }
 
             }

@@ -29,15 +29,17 @@ public class ItemListViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> loggedOutMutableLiveData;
     private MutableLiveData<UserModel> userModelMutableLiveData;
     private MutableLiveData<AreaModel> areaModelMutableLiveData;
+    private MutableLiveData<Boolean> autoThread;
 
     public ItemListViewModel(@NonNull Application application){
         super(application);
         itemsList = new MutableLiveData<>();
         this.appRepository = new AppRepository(application);
-        areaModelMutableLiveData = new MutableLiveData<>();
+        areaModelMutableLiveData =  appRepository.getAreaModelMutableLiveData();
         userMutableLiveData = appRepository.getUserMutableLiveData();
         loggedOutMutableLiveData = appRepository.getLoggedOutMutableLiveData();
         userModelMutableLiveData = appRepository.getUserModelMutableLiveData();
+        autoThread = appRepository.getAutoThread();
     }
 
     public MutableLiveData<List<ItemModel>> getItemsListObserver(){
@@ -62,6 +64,10 @@ public class ItemListViewModel extends AndroidViewModel {
 
     public MutableLiveData<AreaModel> getAreaModelMutableLiveData(){
         return areaModelMutableLiveData;
+    }
+
+    public MutableLiveData<Boolean> getAutoThread() {
+        return autoThread;
     }
 
     public void makeApiCall(){
@@ -102,9 +108,5 @@ public class ItemListViewModel extends AndroidViewModel {
                 itemsList.postValue(null);
             }
         });
-    }
-
-    public void changeArea(AreaModel areaModel){
-        areaModelMutableLiveData.postValue(areaModel);
     }
 }

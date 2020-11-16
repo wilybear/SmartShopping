@@ -36,6 +36,8 @@ public class AppRepository {
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private MutableLiveData<Boolean> loggedOutMutableLiveData;
     private MutableLiveData<UserModel> userModelMutableLiveData;
+    private MutableLiveData<AreaModel> areaModelMutableLiveData;
+    private MutableLiveData<Boolean> autoThread;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
 
@@ -45,6 +47,9 @@ public class AppRepository {
         userMutableLiveData = new MutableLiveData<>();
         loggedOutMutableLiveData = new MutableLiveData<>();
         userModelMutableLiveData = new MutableLiveData<>();
+        areaModelMutableLiveData = new MutableLiveData<>();
+        autoThread = new MutableLiveData<>();
+        autoThread.postValue(false);
         db = FirebaseFirestore.getInstance();
         if(firebaseAuth.getCurrentUser()!=null){
             userMutableLiveData.postValue(firebaseAuth.getCurrentUser());
@@ -136,6 +141,14 @@ public class AppRepository {
 
     public MutableLiveData<UserModel> getUserModelMutableLiveData() {
         return userModelMutableLiveData;
+    }
+
+    public MutableLiveData<AreaModel> getAreaModelMutableLiveData() {
+        return areaModelMutableLiveData;
+    }
+
+    public MutableLiveData<Boolean> getAutoThread() {
+        return autoThread;
     }
 
     private Executor getExecutor(){

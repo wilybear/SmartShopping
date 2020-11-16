@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.smartshopping.R;
 import com.example.smartshopping.model.ItemModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
@@ -88,5 +89,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
     public boolean isGridOption() {
         return gridOption;
+    }
+
+    public void clearData(){
+        List<ItemModel> temp = new ArrayList<>();
+        if(itemList != null) {
+            itemList = temp;
+        }
+        itemList.clear();
+        notifyDataSetChanged();
     }
 }

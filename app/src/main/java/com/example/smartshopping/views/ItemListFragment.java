@@ -66,7 +66,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     BluetoothManager btManager;
     BluetoothAdapter btAdapter;
     BluetoothLeScanner btScanner;
-    String[] uuidss = {"0000ffe0-0000-1000-8000-00805f9b34fb"};
+    String uuidFilter = "74278bda-b644-4520-8f0c-720eaf059935";
     Boolean btScanning = false;
     public Map<String, String> uuids = new HashMap<String, String>();
     private Handler mHandler = new Handler();
@@ -147,7 +147,11 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         btAdapter = btManager.getAdapter();
         btScanner = btAdapter.getBluetoothLeScanner();
         bleThread.running = true;
-        bleThread.start();
+        if(!bleThread.isAlive()) {
+            bleThread = new BleThread();
+            bleThread.running =true;
+            bleThread.start();
+        }
 
     }
     class BleThread extends Thread {
@@ -170,6 +174,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     public void onPause() {
         super.onPause();
         bleThread.running =false;
+        bleThread.interrupt();
     }
 
     @Nullable
@@ -250,6 +255,9 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                 if (structure instanceof IBeacon) {
                     IBeacon iBeacon = (IBeacon) structure;
                     if(result.getRssi() < LIMIT_RSSI){
+                        continue;
+                    }
+                    if(!iBeacon.getUUID().toString().equals(uuidFilter)){
                         continue;
                     }
                     Beacon beacon = new Beacon(iBeacon.getUUID(), result.getRssi(), iBeacon.getMajor(), iBeacon.getMinor(),

@@ -68,17 +68,21 @@ public class AreaPrediction {
     }
 
     public char predictArea(){
-        int minRssi = beacons.get(getMinRssiBeaconKey()).getRssi();
+        int minRssi = beacons.get(getMinRssiBeaconKey()).getMinor();
         int temp = minRssi -100;
-        int threshold = 2;
+        int threshold = 0;
         char current_position = ' ';
-        ArrayList<Character> areas = new ArrayList<>(Arrays.asList(beaconList[temp][0],
+        ArrayList<Character> areas = new ArrayList<>(Arrays.asList(
+                beaconList[temp][0],
                 beaconList[temp][1],
                 beaconList[temp][2],
                 beaconList[temp][3]));
         ArrayList<Integer> detectedMinors = new ArrayList<>();
         detectedMinors.addAll(beacons.values().stream().map(Beacon::getMinor).collect(Collectors.toList()));
         for (char area : areas) { //// area1 --> k로 바꾸기
+            if(area == '-'){
+                continue;
+            }
             ArrayList<Integer> tmp = getBeaconMinorsWithArea(area); // arraylist for beacon in area
             ArrayList<Integer> compare = new ArrayList<>();
             compare.addAll(tmp);
@@ -88,8 +92,6 @@ public class AreaPrediction {
                 threshold = accuracy;
                 current_position=area;
             } ////// exception
-            else if (accuracy == threshold) break;
-            else break;
         }
         return current_position;
     }

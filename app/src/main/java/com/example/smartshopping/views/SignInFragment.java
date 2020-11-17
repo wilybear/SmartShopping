@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,15 +24,16 @@ import androidx.navigation.Navigation;
 import com.example.smartshopping.R;
 import com.example.smartshopping.viewmodel.SignInViewModel;
 import com.example.smartshopping.viewmodel.SignUpViewModel;
+import com.github.nikartm.button.FitButton;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignInFragment extends Fragment {
 
     private EditText emailEditText;
     private EditText pwdEditText;
-    private TextView signInText;
+    private FitButton signInText;
     private SignInViewModel signInViewModel;
-    private TextView signUpText;
+    private FitButton signUpText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

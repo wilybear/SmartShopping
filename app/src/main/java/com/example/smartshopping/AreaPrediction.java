@@ -68,6 +68,11 @@ public class AreaPrediction {
     }
 
     public char predictArea(){
+
+        if(beacons.size() < 4){
+            return ' ';
+        }
+
         int minRssi = beacons.get(getMinRssiBeaconKey()).getMinor();
         int temp = minRssi -100;
         int threshold = 0;

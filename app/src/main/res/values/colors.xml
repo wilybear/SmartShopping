@@ -9,4 +9,8 @@
     <color name="colorGradientStart">#D9FF43</color>
     <color name="colorGradientCenter">#F67831</color>
     <color name="colorGradientEnd">#FF1493</color>
+    <color name="buttonColor">@android:color/transparent</color>
+    <color name="rippleColor">#373F51</color>
+    <color name="textColor">#1B1B1E</color>
+    <color name="whiteTextColor">#D8DBE2</color>
 </resources>

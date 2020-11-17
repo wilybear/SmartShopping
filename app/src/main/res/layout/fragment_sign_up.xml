@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/signUpRootLayout"
-    android:background="@drawable/login_background"
-    >
-    <Button
+    android:background="@drawable/login_background">
+    <com.github.nikartm.button.FitButton
         android:id="@+id/backBtt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:text="Back"
-        android:textColor="@android:color/white"
-        android:background="@android:color/transparent"
+        app:fb_shape="rectangle"
+        app:fb_cornerRadius="15dp"
+        app:fb_rippleColor="@color/rippleColor"
+        app:fb_textColor="@color/whiteTextColor"
+        app:fb_textStyle="bold"
+        app:fb_text="back"
+        app:fb_textAllCaps="true"
+        app:fb_backgroundColor="@color/buttonColor"
     />
 
     <LinearLayout
@@ -125,20 +132,26 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
+            <com.github.nikartm.button.FitButton
                 android:id="@+id/signUpBtt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
                 android:padding="15dp"
                 android:layout_marginEnd="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp"/>
+                android:layout_marginRight="30dp"
+                app:fb_shape="rectangle"
+                app:fb_cornerRadius="15dp"
+                app:fb_rippleColor="@color/rippleColor"
+                app:fb_textColor="@color/whiteTextColor"
+                app:fb_textStyle="bold"
+                app:fb_text="Sign Up"
+                app:fb_textSize="18sp"
+                app:fb_textAllCaps="true"
+                app:fb_backgroundColor="@color/buttonColor"
+                />
 
         </RelativeLayout>
     </LinearLayout>

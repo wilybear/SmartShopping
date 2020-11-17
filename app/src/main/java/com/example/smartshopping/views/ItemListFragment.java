@@ -73,7 +73,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     private static final long SCAN_PERIOD = 5000;
     private static final long LIMIT_RSSI = -70;
     private final static int REQUEST_ENABLE_BT = 1;
-    private Map<Pair<Integer,Integer>, Beacon> beacons = new HashMap<>();
+    private Map<Pair<Integer, Integer>, Beacon> beacons = new HashMap<>();
     BleThread bleThread;
 
     @Override
@@ -118,11 +118,11 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             @Override
             public void onChanged(AreaModel areaModel) {
                 if (areaModel != null) {
-                    if(areaModel.getId() == 0){
+                    if (areaModel.getId() == 0) {
                         itemListAdapter.clearData();
                         tvArea.setText("NO BEACONS");
                         tvNoResult.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         itemListViewModel.makeApiCall();
                         tvNoResult.setVisibility(View.GONE);
                         //TODO: 구역 및 유저 정보 보내고 RecyclerView에 데이터 뿌리기
@@ -138,11 +138,11 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         itemListViewModel.getAutoThread().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
                     rippleBackground.stopRippleAnimation();
                     rippleBackground.setVisibility(View.GONE);
                     rippleImage.setVisibility(View.GONE);
-                }else{
+                } else {
                     rippleBackground.setVisibility(View.VISIBLE);
                     rippleImage.setVisibility(View.VISIBLE);
                     rippleBackground.startRippleAnimation();
@@ -172,17 +172,18 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         bleThread.running = true;
 
         //if thread is alive, start() may throw threadStateException
-        if(!bleThread.isAlive()) {
+        if (!bleThread.isAlive()) {
             bleThread = new BleThread();
-            bleThread.running =true;
+            bleThread.running = true;
             bleThread.start();
         }
 
-        if(itemListAdapter.getItemCount()==0){
+        if (itemListAdapter.getItemCount() == 0) {
             itemListViewModel.getAutoThread().postValue(false);
         }
 
     }
+
     class BleThread extends Thread {
         boolean running = true;
 
@@ -202,7 +203,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     @Override
     public void onPause() {
         super.onPause();
-        bleThread.running =false;
+        bleThread.running = false;
         bleThread.interrupt();
     }
 
@@ -219,13 +220,13 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
 
         logoutBtt = view.findViewById(R.id.logoutBtt);
 //        loggedUserTextView = view.findViewById(R.id.userIdView);
-         tvNoResult = view.findViewById(R.id.noResultView);
+        tvNoResult = view.findViewById(R.id.noResultView);
         tvArea = view.findViewById(R.id.areaTextView);
         changer = view.findViewById(R.id.layoutChanger);
-        rippleBackground=(RippleBackground)view.findViewById(R.id.content);
+        rippleBackground = (RippleBackground) view.findViewById(R.id.content);
         rippleImage = view.findViewById(R.id.centerImage);
 
-        if(itemListViewModel.getAreaModelMutableLiveData().getValue() != null) {
+        if (itemListViewModel.getAreaModelMutableLiveData().getValue() != null) {
             tvArea.setText(itemListViewModel.getAreaModelMutableLiveData().getValue().getArea() + " Area");
         }
         logoutBtt.setOnClickListener(new View.OnClickListener() {
@@ -252,17 +253,17 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         refreshBtt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(btScanning){
-                    Toast.makeText(getContext(),"Scanning...",Toast.LENGTH_SHORT).show();
-                }else{
+                if (btScanning) {
+                    Toast.makeText(getContext(), "Scanning...", Toast.LENGTH_SHORT).show();
+                } else {
                     itemListAdapter.clearData();
                     itemListViewModel.getAutoThread().postValue(false);
-                    if(bleThread.isAlive()) {
+                    if (bleThread.isAlive()) {
                         bleThread.running = false;
                         bleThread.interrupt();
                     }
                     bleThread = new BleThread();
-                    bleThread.running =true;
+                    bleThread.running = true;
                     bleThread.start();
 
                 }
@@ -291,20 +292,20 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             for (ADStructure structure : structures) {
                 if (structure instanceof IBeacon) {
                     IBeacon iBeacon = (IBeacon) structure;
-                    if(result.getRssi() < LIMIT_RSSI){
+                    if (result.getRssi() < LIMIT_RSSI) {
                         continue;
                     }
-                    if(!iBeacon.getUUID().toString().equals(uuidFilter)){
+                    if (!iBeacon.getUUID().toString().equals(uuidFilter)) {
                         continue;
                     }
                     Beacon beacon = new Beacon(iBeacon.getUUID(), result.getRssi(), iBeacon.getMajor(), iBeacon.getMinor(),
                             result.getDevice().getName());
-                    Pair<Integer,Integer> key = Pair.create(iBeacon.getMajor(),iBeacon.getMinor());
-                    if(beacons.containsKey(key)){
+                    Pair<Integer, Integer> key = Pair.create(iBeacon.getMajor(), iBeacon.getMinor());
+                    if (beacons.containsKey(key)) {
                         Beacon prevBeacon = beacons.get(key);
-                        prevBeacon.setRssi((prevBeacon.getRssi()+beacon.getRssi())/2);
-                        beacons.put(key,prevBeacon);
-                    }else {
+                        prevBeacon.setRssi((prevBeacon.getRssi() + beacon.getRssi()) / 2);
+                        beacons.put(key, prevBeacon);
+                    } else {
                         beacons.put(key, beacon);
                     }
                     //getScanRecord.getServiceUUids()
@@ -338,17 +339,17 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             public void run() {
                 btScanner.stopScan(leScanCallback);
                 //TODO:AREA 계산하는 함수
-//                if(beacons.isEmpty()){
-//                    itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(0,' '));
-//                }else {
-                    AreaPrediction areaPrediction = new AreaPrediction(beacons);
 
-//                    char result = areaPrediction.predictArea();
+                AreaPrediction areaPrediction = new AreaPrediction(beacons);
+
+//              char result = areaPrediction.predictArea();
                 char result = 'A';
-                    if (result != ' ') {
-                        itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(1, result));
-                    }
- //               }
+                if (result != ' ') {
+                    itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(1, result));
+                } else {
+                    //Error not enough available beacons
+                    itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(0, ' '));
+                }
 
             }
         });

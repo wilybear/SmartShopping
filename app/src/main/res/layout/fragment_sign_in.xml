@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
+    android:background="@drawable/login_background"
     android:id="@+id/signInRootLayout"
     >
 
@@ -11,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearInputForm"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="100dp"
         android:gravity="center"
         android:text="Smart\nShopping"
         android:textColor="@android:color/white"
@@ -61,37 +62,54 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             >
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Sign In"
+
+            <com.github.nikartm.button.FitButton
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:layout_margin="16dp"
+                android:gravity="center"
                 android:id="@+id/signInBtt"
                 android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp" />
+                android:layout_marginRight="40dp"
+                app:fb_shape="rectangle"
+                app:fb_cornerRadius="15dp"
+                app:fb_rippleColor="@color/rippleColor"
+                app:fb_textColor="@color/whiteTextColor"
+                app:fb_textStyle="bold"
+                app:fb_textSize="22dp"
+                app:fb_text="Sign In"
+                app:fb_textAllCaps="true"
+                app:fb_backgroundColor="@color/buttonColor"
+                />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
+            <com.github.nikartm.button.FitButton
                 android:id="@+id/signUpBtt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
                 android:padding="15dp"
                 android:layout_marginStart="30dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="30dp"/>
+                android:layout_marginLeft="30dp"
+                app:fb_shape="rectangle"
+                app:fb_cornerRadius="15dp"
+                app:fb_rippleColor="@color/rippleColor"
+                app:fb_textColor="@color/whiteTextColor"
+                app:fb_textStyle="bold"
+                app:fb_text="Sign In"
+                app:fb_textSize="22dp"
+                app:fb_textAllCaps="true"
+                app:fb_backgroundColor="@color/buttonColor"
+                />
             <TextView
                 android:id="@+id/forgotPwdBtt"
                 android:layout_width="wrap_content"
@@ -99,7 +117,7 @@
                 android:text="Forgot Password"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
+                android:textColor="@color/whiteTextColor"
                 android:padding="15dp"
                 android:layout_marginEnd="30dp"
                 android:layout_alignParentEnd="true"

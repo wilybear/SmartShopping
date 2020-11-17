@@ -27,6 +27,7 @@ import androidx.navigation.Navigation;
 
 import com.example.smartshopping.R;
 import com.example.smartshopping.viewmodel.SignUpViewModel;
+import com.github.nikartm.button.FitButton;
 import com.google.android.play.core.splitinstall.c;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,10 +41,10 @@ public class SignUpFragment extends Fragment {
 
     private EditText emailEditText;
     private EditText pwdEditText;
-    private TextView signUpText;
+    private FitButton signUpText;
     private EditText pwdEditText2;
     private EditText birthdayText;
-    private Button backBtt;
+    private FitButton backBtt;
     private SignUpViewModel signUpViewModel;
     private RadioGroup radioGenderGroup;
     private RadioButton radioButton;

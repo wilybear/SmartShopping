@@ -7,18 +7,16 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +44,6 @@ import com.neovisionaries.bluetooth.ble.advertising.IBeacon;
 import com.pedro.library.AutoPermissions;
 import com.skyfishjy.library.RippleBackground;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +61,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     private TextView tvArea;
     private ImageButton refreshBtt;
     private RippleBackground rippleBackground;
+    private ImageView rippleImage;
     //bluetooth
     BluetoothManager btManager;
     BluetoothAdapter btAdapter;
@@ -120,9 +118,16 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             @Override
             public void onChanged(AreaModel areaModel) {
                 if (areaModel != null) {
-                    itemListViewModel.makeApiCall();
-                    //TODO: 구역 및 유저 정보 보내고 RecyclerView에 데이터 뿌리기
-                    tvArea.setText(areaModel.getArea() + " Area");
+                    if(areaModel.getId() == 0){
+                        itemListAdapter.clearData();
+                        tvArea.setText("NO BEACONS");
+                        tvNoResult.setVisibility(View.VISIBLE);
+                    }else {
+                        itemListViewModel.makeApiCall();
+                        tvNoResult.setVisibility(View.GONE);
+                        //TODO: 구역 및 유저 정보 보내고 RecyclerView에 데이터 뿌리기
+                        tvArea.setText(areaModel.getArea() + " Area");
+                    }
                     itemListViewModel.getAutoThread().postValue(true);
                 } else {
                     tvArea.setText("Searching...");
@@ -136,8 +141,10 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                 if(aBoolean){
                     rippleBackground.stopRippleAnimation();
                     rippleBackground.setVisibility(View.GONE);
+                    rippleImage.setVisibility(View.GONE);
                 }else{
                     rippleBackground.setVisibility(View.VISIBLE);
+                    rippleImage.setVisibility(View.VISIBLE);
                     rippleBackground.startRippleAnimation();
                 }
             }
@@ -204,7 +211,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
         itemListAdapter = new ItemListAdapter(getContext(), itemModelList, this);
         recyclerView.setAdapter(itemListAdapter);
@@ -216,6 +223,8 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         tvArea = view.findViewById(R.id.areaTextView);
         changer = view.findViewById(R.id.layoutChanger);
         rippleBackground=(RippleBackground)view.findViewById(R.id.content);
+        rippleImage = view.findViewById(R.id.centerImage);
+
         if(itemListViewModel.getAreaModelMutableLiveData().getValue() != null) {
             tvArea.setText(itemListViewModel.getAreaModelMutableLiveData().getValue().getArea() + " Area");
         }
@@ -233,7 +242,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     itemListAdapter.setGridOption(false);
                 } else {
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     itemListAdapter.setGridOption(true);
                 }
                 recyclerView.setAdapter(itemListAdapter);
@@ -329,14 +338,17 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             public void run() {
                 btScanner.stopScan(leScanCallback);
                 //TODO:AREA 계산하는 함수
-                AreaPrediction areaPrediction = new AreaPrediction(beacons);
-                //for debug
-                //char result = areaPrediction.predictArea();
+//                if(beacons.isEmpty()){
+//                    itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(0,' '));
+//                }else {
+                    AreaPrediction areaPrediction = new AreaPrediction(beacons);
 
+//                    char result = areaPrediction.predictArea();
                 char result = 'A';
-                if(result != ' '){
-                    itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(1,result));
-                }
+                    if (result != ' ') {
+                        itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(1, result));
+                    }
+ //               }
 
             }
         });

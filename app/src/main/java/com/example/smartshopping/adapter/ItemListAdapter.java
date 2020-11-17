@@ -92,8 +92,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     }
 
     public void clearData(){
-        List<ItemModel> temp = new ArrayList<>();
-        if(itemList != null) {
+        if(itemList == null) {
+            List<ItemModel> temp = new ArrayList<>();
             itemList = temp;
         }
         itemList.clear();

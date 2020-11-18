@@ -71,7 +71,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     public Map<String, String> uuids = new HashMap<String, String>();
     private Handler mHandler = new Handler();
     private static final long SCAN_PERIOD = 5000;
-    private static final long LIMIT_RSSI = -70;
+    private static final long LIMIT_RSSI = -85;
     private final static int REQUEST_ENABLE_BT = 1;
     private Map<Pair<Integer, Integer>, Beacon> beacons = new HashMap<>();
     BleThread bleThread;
@@ -256,6 +256,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                 if (btScanning) {
                     Toast.makeText(getContext(), "Scanning...", Toast.LENGTH_SHORT).show();
                 } else {
+                    tvNoResult.setVisibility(View.GONE);
                     itemListAdapter.clearData();
                     itemListViewModel.getAutoThread().postValue(false);
                     if (bleThread.isAlive()) {
@@ -292,9 +293,9 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             for (ADStructure structure : structures) {
                 if (structure instanceof IBeacon) {
                     IBeacon iBeacon = (IBeacon) structure;
-                    if (result.getRssi() < LIMIT_RSSI) {
-                        continue;
-                    }
+//                    if (result.getRssi() < LIMIT_RSSI) {
+//                        continue;
+//                    }
                     if (!iBeacon.getUUID().toString().equals(uuidFilter)) {
                         continue;
                     }
@@ -342,8 +343,8 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
 
                 AreaPrediction areaPrediction = new AreaPrediction(beacons);
 
-//              char result = areaPrediction.predictArea();
-                char result = 'A';
+              char result = areaPrediction.predictArea();
+  //              char result = 'A';
                 if (result != ' ') {
                     itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(1, result));
                 } else {

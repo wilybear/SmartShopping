@@ -105,7 +105,7 @@
                 app:fb_rippleColor="@color/rippleColor"
                 app:fb_textColor="@color/whiteTextColor"
                 app:fb_textStyle="bold"
-                app:fb_text="Sign In"
+                app:fb_text="Sign Up"
                 app:fb_textSize="22dp"
                 app:fb_textAllCaps="true"
                 app:fb_backgroundColor="@color/buttonColor"

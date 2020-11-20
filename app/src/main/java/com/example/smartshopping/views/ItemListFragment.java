@@ -44,6 +44,7 @@ import com.neovisionaries.bluetooth.ble.advertising.IBeacon;
 import com.pedro.library.AutoPermissions;
 import com.skyfishjy.library.RippleBackground;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -299,12 +300,15 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                     if (!iBeacon.getUUID().toString().equals(uuidFilter)) {
                         continue;
                     }
+                    ArrayList<Integer> temp = new ArrayList<>();
+                    temp.add(result.getRssi());
                     Beacon beacon = new Beacon(iBeacon.getUUID(), result.getRssi(), iBeacon.getMajor(), iBeacon.getMinor(),
-                            result.getDevice().getName());
+                            result.getDevice().getName(),temp);
                     Pair<Integer, Integer> key = Pair.create(iBeacon.getMajor(), iBeacon.getMinor());
                     if (beacons.containsKey(key)) {
                         Beacon prevBeacon = beacons.get(key);
-                        prevBeacon.setRssi((prevBeacon.getRssi() + beacon.getRssi()) / 2);
+                        prevBeacon.addRssi(result.getRssi());
+                        prevBeacon.setRssi(beacon.getRssi());
                         beacons.put(key, prevBeacon);
                     } else {
                         beacons.put(key, beacon);

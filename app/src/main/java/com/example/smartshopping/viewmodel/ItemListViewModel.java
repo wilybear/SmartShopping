@@ -1,6 +1,7 @@
 package com.example.smartshopping.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -14,6 +15,7 @@ import com.example.smartshopping.network.APIService;
 import com.example.smartshopping.network.RetroInstance;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.ParseException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -73,6 +75,8 @@ public class ItemListViewModel extends AndroidViewModel {
     public void makeApiCall(){
         APIService apiService = RetroInstance.getRetroClient().create(APIService.class);
         //해당에 파라미터 추가
+        UserModel userModel = userModelMutableLiveData.getValue();
+
         Call<List<ItemModel>> call = apiService.getItemList();
 
         call.enqueue(new Callback<List<ItemModel>>() {
@@ -95,7 +99,13 @@ public class ItemListViewModel extends AndroidViewModel {
         if(userModel == null || areaModel == null){
             return;
         }
-        Call<List<ItemModel>> call = apiService.getItemList(userModel.getGender(),userModel.getBirthday(),areaModel.getArea());
+        int age =20;
+        try {
+            age = userModel.calculateAge();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Call<List<ItemModel>> call = apiService.getItemList(userModel.getGender(),age,areaModel.getArea());
 
         call.enqueue(new Callback<List<ItemModel>>() {
             @Override

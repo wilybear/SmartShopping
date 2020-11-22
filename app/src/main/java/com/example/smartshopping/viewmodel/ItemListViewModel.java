@@ -119,4 +119,8 @@ public class ItemListViewModel extends AndroidViewModel {
             }
         });
     }
+
+    public void setItemList(List<ItemModel> itemModels){
+        itemsList.postValue(itemModels);
+    }
 }

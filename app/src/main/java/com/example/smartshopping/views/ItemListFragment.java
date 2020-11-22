@@ -51,6 +51,12 @@ import java.util.Map;
 
 public class ItemListFragment extends Fragment implements ItemListAdapter.ItemClickListener {
 
+    private List<ItemModel> a;
+    private List<ItemModel> b;
+    private List<ItemModel> c;
+    private List<ItemModel> d;
+
+
     private List<ItemModel> itemModelList;
     private ItemListAdapter itemListAdapter;
     private ItemListViewModel itemListViewModel;
@@ -80,6 +86,34 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        a = new ArrayList<>();
+        b = new ArrayList<>();
+        c = new ArrayList<>();
+        d = new ArrayList<>();
+
+        a.add(new ItemModel("과자1","2222",R.drawable.a_1));
+        a.add(new ItemModel("과자2","2222",R.drawable.a_2));
+        a.add(new ItemModel("과자3","2222",R.drawable.a_3));
+        a.add(new ItemModel("과자4","2222",R.drawable.a_4));
+
+        b.add(new ItemModel("의류1","2222",R.drawable.b_1));
+        b.add(new ItemModel("의류2","2222",R.drawable.b_2));
+        b.add(new ItemModel("의류3","2222",R.drawable.b_3));
+        b.add(new ItemModel("의류4","2222",R.drawable.b_4));
+
+        c.add(new ItemModel("장난감1","2222",R.drawable.c_1));
+        c.add(new ItemModel("장난감2","2222",R.drawable.c_2));
+        c.add(new ItemModel("장난감3","2222",R.drawable.c_3));
+        c.add(new ItemModel("장난감4","2222",R.drawable.c_4));
+
+        d.add(new ItemModel("여행용품1","2222",R.drawable.d_1));
+        d.add(new ItemModel("여행용품2","2222",R.drawable.d_2));
+        d.add(new ItemModel("여행용품3","2222",R.drawable.d_3));
+        d.add(new ItemModel("여행용품4","2222",R.drawable.d_4));
+
+
 
         itemListViewModel = ViewModelProviders.of(this).get(ItemListViewModel.class);
 
@@ -124,7 +158,21 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                         tvArea.setText("NO BEACONS");
                         tvNoResult.setVisibility(View.VISIBLE);
                     } else {
-                        itemListViewModel.makeApiCall();
+                        //itemListViewModel.makeApiCall();
+                        switch (areaModel.getArea()){
+                            case 'A':
+                                itemListViewModel.setItemList(a);
+                                break;
+                            case 'B':
+                                itemListViewModel.setItemList(b);
+                                break;
+                            case 'C':
+                                itemListViewModel.setItemList(c);
+                                break;
+                            case 'D':
+                                itemListViewModel.setItemList(d);
+                                break;
+                        }
                         tvNoResult.setVisibility(View.GONE);
                         //TODO: 구역 및 유저 정보 보내고 RecyclerView에 데이터 뿌리기
                         tvArea.setText(areaModel.getArea() + " Area");
@@ -193,7 +241,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
             while (running && !isInterrupted()) {
                 startScanning();
                 try {
-                    Thread.sleep(1000 * 60);
+                    Thread.sleep(5000+5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -282,7 +330,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
         Toast.makeText(getContext(), "Clicked Title :" + model.getImageUrl(), Toast.LENGTH_LONG).show();
         Bundle args = new Bundle();
         args.putString("title", model.getTitle());
-        args.putString("url", model.getImageUrl());
+        args.putInt("url", model.getD());
         Navigation.findNavController(getView()).navigate(R.id.action_itemListFragment_to_itemFragement, args);
     }
 

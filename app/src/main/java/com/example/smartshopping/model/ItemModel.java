@@ -11,12 +11,13 @@ public class ItemModel {
 
     @SerializedName(value = "image")
     private String imageUrl;
-
+    private int d;
     //private int price;
 
-    public ItemModel(String title, String imageUrl) {
+    public ItemModel(String title, String imageUrl, int no) {
         this.title = title;
         this.imageUrl = imageUrl;
+        this.d = no;
     }
 
     public String getTitle() {
@@ -29,6 +30,14 @@ public class ItemModel {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public int getD() {
+        return d;
+    }
+
+    public void setD(int d) {
+        this.d = d;
     }
 
     public void setImageUrl(String imageUrl) {

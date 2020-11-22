@@ -57,7 +57,7 @@
             android:defaultValue="title"/>
         <argument
             android:name="url"
-            app:argType="string"
-            android:defaultValue="url"/>
+            app:argType="integer" />
+
     </fragment>
 </navigation>

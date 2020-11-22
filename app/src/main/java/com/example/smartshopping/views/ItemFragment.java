@@ -27,7 +27,7 @@ public class ItemFragment extends Fragment {
     private static final String ARG_PARAM2 = "title";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private int mParam1;
     private String mParam2;
 
     public ItemFragment() {
@@ -56,7 +56,7 @@ public class ItemFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam1 = getArguments().getInt(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -69,12 +69,12 @@ public class ItemFragment extends Fragment {
         TextView title = view.findViewById(R.id.title);
         ImageView imageView = view.findViewById(R.id.imageView);
         title.setText(mParam2);
-        Glide.with(getContext())
-                .load(mParam1)
-                .apply(RequestOptions.centerCropTransform())
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(imageView);
-
+//        Glide.with(getContext())
+//                .load(mParam1)
+//                .apply(RequestOptions.centerCropTransform())
+//                .placeholder(R.drawable.ic_launcher_foreground)
+//                .into(imageView);
+        imageView.setImageResource(mParam1);
         return view;
     }
 }

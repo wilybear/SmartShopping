@@ -47,11 +47,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemListAdapter.ItemViewHolder holder, int position) {
         holder.tvTitle.setText(this.itemList.get(position).getTitle().toString());
-        Glide.with(context)
-                .load(this.itemList.get(position).getImageUrl())
-                .apply(RequestOptions.centerCropTransform())
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(holder.imageView);
+//        Glide.with(context)
+//                .load(this.itemList.get(position).getImageUrl())
+//                .apply(RequestOptions.centerCropTransform())
+//                .placeholder(R.drawable.ic_launcher_foreground)
+//                .into(holder.imageView);
+        holder.imageView.setImageResource(this.itemList.get(position).getD());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

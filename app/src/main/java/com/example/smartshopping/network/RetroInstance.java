@@ -4,8 +4,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetroInstance {
-    //public static String BASE_URL = "https://recommendation.shop/";
-    public static String BASE_URL = "https://velmm.com/apis/";
+    public static String BASE_URL = "https://recommendation.shop/";
+   // public static String BASE_URL = "https://velmm.com/apis/";
     private static Retrofit retrofit;
 
     public static Retrofit getRetroClient(){

@@ -72,25 +72,25 @@ public class ItemListViewModel extends AndroidViewModel {
         return autoThread;
     }
 
-    public void makeApiCall(){
-        APIService apiService = RetroInstance.getRetroClient().create(APIService.class);
-        //해당에 파라미터 추가
-        UserModel userModel = userModelMutableLiveData.getValue();
-
-        Call<List<ItemModel>> call = apiService.getItemList();
-
-        call.enqueue(new Callback<List<ItemModel>>() {
-            @Override
-            public void onResponse(Call<List<ItemModel>> call, Response<List<ItemModel>> response) {
-                itemsList.postValue(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<List<ItemModel>> call, Throwable t) {
-                itemsList.postValue(null);
-            }
-        });
-    }
+//    public void makeApiCall(){
+//        APIService apiService = RetroInstance.getRetroClient().create(APIService.class);
+//        //해당에 파라미터 추가
+//        UserModel userModel = userModelMutableLiveData.getValue();
+//
+//        Call<List<ItemModel>> call = apiService.getItemList();
+//
+//        call.enqueue(new Callback<List<ItemModel>>() {
+//            @Override
+//            public void onResponse(Call<List<ItemModel>> call, Response<List<ItemModel>> response) {
+//                itemsList.postValue(response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<ItemModel>> call, Throwable t) {
+//                itemsList.postValue(null);
+//            }
+//        });
+//    }
 
     public void makeApiCallWithParm(){
         APIService apiService = RetroInstance.getRetroClient().create(APIService.class);
@@ -105,7 +105,7 @@ public class ItemListViewModel extends AndroidViewModel {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Call<List<ItemModel>> call = apiService.getItemList(userModel.getGender(),age,areaModel.getArea());
+        Call<List<ItemModel>> call = apiService.getItemList(areaModel.getArea(),"sampleId");
 
         call.enqueue(new Callback<List<ItemModel>>() {
             @Override

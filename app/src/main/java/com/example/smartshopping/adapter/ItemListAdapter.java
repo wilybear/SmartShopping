@@ -46,13 +46,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
     @Override
     public void onBindViewHolder(@NonNull ItemListAdapter.ItemViewHolder holder, int position) {
-        holder.tvTitle.setText(this.itemList.get(position).getTitle().toString());
+        holder.tvTitle.setText(this.itemList.get(position).getProductName().toString());
+
         Glide.with(context)
                 .load(this.itemList.get(position).getImageUrl())
                 .apply(RequestOptions.centerCropTransform())
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(holder.imageView);
-
+        holder.tvPrice.setText(this.itemList.get(position).getPrice()+"원");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,10 +73,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     public class ItemViewHolder extends RecyclerView.ViewHolder{
         TextView tvTitle;
         ImageView imageView;
+        TextView tvPrice;
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.title);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            tvPrice = (TextView) itemView.findViewById(R.id.price);
         }
     }
 

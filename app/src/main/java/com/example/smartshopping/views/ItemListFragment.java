@@ -124,7 +124,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                         tvArea.setText("NO BEACONS");
                         tvNoResult.setVisibility(View.VISIBLE);
                     } else {
-                        itemListViewModel.makeApiCall();
+                        itemListViewModel.makeApiCallWithParm();
                         tvNoResult.setVisibility(View.GONE);
                         //TODO: 구역 및 유저 정보 보내고 RecyclerView에 데이터 뿌리기
                         tvArea.setText(areaModel.getArea() + " Area");
@@ -281,7 +281,7 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
     public void onItemClick(ItemModel model) {
         Toast.makeText(getContext(), "Clicked Title :" + model.getImageUrl(), Toast.LENGTH_LONG).show();
         Bundle args = new Bundle();
-        args.putString("title", model.getTitle());
+        args.putString("title", model.getProductName());
         args.putString("url", model.getImageUrl());
         Navigation.findNavController(getView()).navigate(R.id.action_itemListFragment_to_itemFragement, args);
     }
@@ -346,9 +346,8 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.ItemCl
                 //TODO:AREA 계산하는 함수
 
                 AreaPrediction areaPrediction = new AreaPrediction(beacons);
-
-              char result = areaPrediction.predictArea();
-  //              char result = 'A';
+                char result = areaPrediction.predictArea();
+               // char result = 'A';
                 if (result != ' ') {
                     itemListViewModel.getAreaModelMutableLiveData().postValue(new AreaModel(1, result));
                 } else {

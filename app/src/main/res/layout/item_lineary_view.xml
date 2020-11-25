@@ -17,6 +17,10 @@
         android:id="@+id/imageView"
         android:layout_width="120dp"
         android:layout_height="120dp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -28,7 +32,21 @@
         android:text="TITLE"
         android:layout_marginLeft="20dp"
         android:textStyle="bold"
+        android:layout_marginBottom="20dp"
         android:layout_marginStart="20dp"/>
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background=  "@android:color/transparent"
+        android:gravity="center_vertical"
+        android:textSize="25dp"
+        android:textColor="@color/textColor"
+        android:text="Price"
+        android:layout_marginLeft="20dp"
+        android:textStyle="bold"
+        android:layout_marginStart="20dp"/>
+    </LinearLayout>
 
 
 </LinearLayout>
